@@ -10,3 +10,8 @@ export type OfferType = {
   operating_mode: string;
   type_of_work: string;
 };
+
+export type SelectType = {
+  value: string;
+  lavel: string;
+};

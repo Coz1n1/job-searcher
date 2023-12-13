@@ -3,19 +3,21 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const handleJobClick = () => {
-    navigate("/company-job-add");
-  };
-
   return (
-    <div className="absolute flex w-screen items-center justify-end  z-10 px-16 py-8">
-      <div className="flex gap-8">
-        <button className="text-lg font-bold text-white bg-blue-500 px-4 py-2 rounded-lg">
+    <div className="absolute flex w-screen items-center justify-between z-10 px-4 sm:px-16 py-8">
+      <div>
+        <h1 className="font-bold text-xl sm:text-3xl">JobSearcher</h1>
+      </div>
+      <div className="flex gap-2 sm:gap-8">
+        <button
+          className="text-lg font-bold text-white bg-blue-500 px-4 py-2 rounded-lg"
+          onClick={() => navigate("/jobs")}
+        >
           Job offers
         </button>
         <button
           className="text-lg font-bold text-white bg-blue-500 px-4 py-2 rounded-lg"
-          onClick={handleJobClick}
+          onClick={() => navigate("/company-job-add")}
         >
           Post a job
         </button>

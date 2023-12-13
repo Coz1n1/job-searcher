@@ -6,32 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 import { OfferType } from "../../types/index";
 import JobOffer from "./JobOffer";
 import { IoClose } from "react-icons/io5";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../@/components/ui/select";
+import AddingMenu from "./AddingMenu";
 
 const CompanyProfile = () => {
   const [searchParams] = useSearchParams();
   const company = searchParams.get("company");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [technologies, setTechnologies] = useState<[""]>();
-  const [salary, setSalary] = useState("");
-  const [experience, setExperience] = useState("");
-  const [location, setLocation] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [operatingMode, setOperatingMode] = useState("");
-  const [typeOfWork, setTypeOfWork] = useState("");
-  const [jobsData, setJobsData] = useState<any[]>([]);
   const [isActive, setIsActive] = useState(false);
-
-  const fortmatResponse = (res: any) => {
-    return JSON.stringify(res, null, 2);
-  };
 
   const findAll = async () => {
     const response = await axios.post("http://localhost:3002/companyOffers", {
@@ -40,43 +20,42 @@ const CompanyProfile = () => {
     return response.data.jobs;
   };
 
-  const { data: companyJobOffers, isLoading } = useQuery<OfferType[], Error>({
+  const {
+    data: companyJobOffers,
+    isLoading,
+    isError,
+  } = useQuery<OfferType[], Error>({
     queryKey: ["query-tutorials"],
     queryFn: async () => {
       return await findAll();
     },
   });
 
-  // const handleAdd = () => {
-  //   axios
-  //     .post("http://localhost:3002/companyOffer", {
-  //       title: title,
-  //       description: description,
-  //       technologies: technologies,
-  //       salary: salary,
-  //       experience: experience,
-  //       location: location,
-  //       companyName: companyName,
-  //       operatingMode: operatingMode,
-  //       typeOfWork: typeOfWork,
-  //     })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-
-  // if (isError) {
-  //   return <h1>Error occured</h1>;
-  // }
+  if (isError) {
+    return <h1>Error occured</h1>;
+  }
 
   return (
     <div className="w-screen h-screen">
+      <div>
+        <div className="relative isolate">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+          >
+            <div
+              style={{
+                clipPath:
+                  "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
+              }}
+              className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-pink-500 to-blue-500 opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+            ></div>
+          </div>
+        </div>
+      </div>
       {isActive ? (
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <div className="flex items-center gap-8">
+          <div className="flex items-center gap-8 justify-center text-center">
             <div className="px-1 py-1 bg-pink-500 rounded-xl">
               <IoClose
                 size={33}
@@ -89,34 +68,17 @@ const CompanyProfile = () => {
               <span className="text-blue-500">{company}</span>
             </h1>
           </div>
-          <div className="flex items-center mt-8 gap-8">
-            <div className="flex flex-col gap-2">
-              <h1 className="text-xl font-bold">Job Title</h1>
-              <input
-                type="text"
-                placeholder="Enter job title..."
-                className="w-[350px] px-4 py-2 border-2 border-pink-500 rounded-lg"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <h1 className="text-xl font-bold">Experience</h1>
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <AddingMenu company={company} />
         </div>
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center">
-          <h1 className="font-bold text-blue-500 text-2xl mb-4">{company}</h1>
-          <h1 className="text-3xl font-bold mb-8">
+          <h1 className="mb-4 text-2xl font-bold text-center">
+            Add and manage offers for the company:
+          </h1>
+          <h1 className="font-bold text-white text-xl md:text-2xl mb-4 bg-blue-500 px-4 py-2 rounded-lg">
+            {company}
+          </h1>
+          <h1 className="text-2xl font-bold mb-8">
             All job offers -{" "}
             <span className="text-pink-500">[{companyJobOffers?.length}]</span>
           </h1>
@@ -131,7 +93,7 @@ const CompanyProfile = () => {
               ))
             )}
             <div
-              className="w-[700px] h-[300px] bg-zinc-500/20 rounded-xl border-2 border-dashed border-pink-500 flex items-center justify-center cursor-pointer hover:bg-zinc-500/30"
+              className="w-screen md:w-[700px] h-[150px] bg-blue-300/10 rounded-xl border-2 border-dashed border-pink-500 flex items-center justify-center cursor-pointer hover:bg-blue-300/30"
               onClick={() => setIsActive(!isActive)}
             >
               <div className="flex items-center gap-2">
