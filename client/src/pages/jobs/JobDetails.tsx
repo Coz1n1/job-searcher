@@ -11,6 +11,8 @@ import { IoInvertMode } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaWallet } from "react-icons/fa6";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 
 const JobDetails = () => {
   const [searchParams] = useSearchParams();
@@ -21,9 +23,11 @@ const JobDetails = () => {
   const [applyEmail, setApplyEmail] = useState("");
   const [applyName, setApplyName] = useState("");
   const [applyAdditionalInfo, setApplyAdditionalInfo] = useState("");
+  const [fileValue, setFileValue] = useState("");
   const navigate = useNavigate();
   const id = searchParams.get("id");
   const companyName = searchParams.get("company");
+  const { toast } = useToast();
 
   useEffect(() => {
     const getJobData = async () => {
@@ -52,9 +56,26 @@ const JobDetails = () => {
   }, []);
 
   const handleApply = () => {
+    axios
+      .post("http://localhost:3002/applyForOffer", {
+        id: id,
+        userName: applyName,
+        userEmail: applyEmail,
+        additionalInfo: applyAdditionalInfo,
+        file: fileValue,
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    toast({
+      title: "Application sent",
+      description:
+        "Search for more info about an offer or continue applying for others",
+    });
     setApplyName("");
     setApplyEmail("");
     setApplyAdditionalInfo("");
+    setFileValue("");
   };
 
   const handleDetailsCheck = (e: any) => {
@@ -66,28 +87,28 @@ const JobDetails = () => {
 
   return (
     <div className="w-screen flex flex-col items-center justify-center relative">
-      <div className="w-full px-16 flex items-center justify-center bg-blue-200 rounded-br-3xl rounded-bl-3xl py-24">
+      <div className="w-full flex items-center justify-center bg-blue-200 rounded-br-3xl rounded-bl-3xl py-24">
         <div
-          className="absolute left-12 w-16 h-16 bg-zinc-500/50 rounded-full flex items-center justify-center"
+          className="absolute left-4 md:left-12 w-8 h-8 md:w-16 md:h-16 bg-zinc-500/50 rounded-full flex items-center justify-center"
           role="button"
           onClick={() => navigate("/jobs")}
         >
           <FaArrowLeft size={25} className="text-white" />
         </div>
-        <h1 className="text-center text-8xl font-bold text-white">
+        <h1 className="text-center text-3xl md:text-5xl xl:text-8xl font-bold text-white">
           {currentJobData?.company_name}
         </h1>
       </div>
       {isLoading ? (
         <h1>Loading...</h1>
       ) : (
-        <div className="flex flex-wrap absolute top-64 gap-8 justify-center">
-          <div className="flex flex-col">
-            <div className="flex flex-col bg-white rounded-lg w-[700px] py-4 shadow-xl shadow-black/10">
+        <div className="flex flex-wrap absolute top-40 md:top-48 xl:top-64 gap-8 justify-center w-full">
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col bg-white rounded-lg w-screen sm:w-[600px] md:w-[700px] py-4 shadow-xl shadow-black/10">
               <div className="flex w-full items-center justify-start px-4 gap-4">
-                <div className="w-24 h-24 rounded-full bg-black"></div>
+                <div className="w-12 md:w-24 h-12 md:h-24 rounded-full bg-black"></div>
                 <div className="flex flex-col gap-2">
-                  <h1 className="font-bold text-2xl text-blue-600">
+                  <h1 className="font-bold text-xl md:text-2xl text-blue-600">
                     {currentJobData?.title}
                   </h1>
                   <div className="flex gap-4">
@@ -108,14 +129,14 @@ const JobDetails = () => {
                     </div>
                   </div>
                   <div>
-                    <h1 className="bg-emerald-500 w-[120px] gap-2 py-2 rounded-lg font-bold text-lg text-white flex items-center justify-center">
+                    <h1 className="bg-emerald-500 w-[70px] md:w-[120px] gap-2 py-2 rounded-lg font-bold text-md md:text-lg text-white flex items-center justify-center">
                       <FaWallet />
                       {currentJobData?.salary}
                     </h1>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between px-4 mt-12 gap-12">
+              <div className="flex justify-center flex-wrap md:justify-between px-4 mt-12 gap-12">
                 <div className="flex items-center gap-4">
                   <div className="flex items-center px-2 py-2 bg-purple-300 rounded-lg">
                     <FaStar size={25} className="text-purple-700" />
@@ -151,7 +172,7 @@ const JobDetails = () => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col bg-white rounded-lg w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4">
+            <div className="flex flex-col bg-white rounded-lg w-screen sm:w-[600px] md:w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4">
               <h1 className="font-bold text-xl text-blue-600">Tech Stack</h1>
               <div className="flex flex-wrap gap-4 mt-4">
                 {currentJobData?.technologies.map((e: any, i) => (
@@ -164,7 +185,7 @@ const JobDetails = () => {
                 ))}
               </div>
             </div>
-            <div className="flex flex-col bg-white rounded-lg w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4">
+            <div className="flex flex-col bg-white rounded-lg w-screen sm:w-[600px] md:w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4">
               <h1 className="font-bold text-xl text-blue-600">
                 Job Description
               </h1>
@@ -172,14 +193,14 @@ const JobDetails = () => {
                 {currentJobData?.description}
               </p>
             </div>
-            <div className="flex flex-col bg-white rounded-lg w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4 mb-12">
+            <div className="flex flex-col bg-white rounded-lg w-screen sm:w-[600px] md:w-[700px] py-4 shadow-xl shadow-black/10 mt-6 px-4 mb-12">
               <h1 className="font-bold text-xl text-blue-600">Apply Form</h1>
               <div className="w-full flex flex-wrap gap-8 mt-4">
                 <div className="flex flex-col">
                   <h1 className="font-bold">Name</h1>
                   <input
                     type="text"
-                    className="w-[300px] border-2 border-zinc-600 rounded-lg py-2 px-4"
+                    className="w-[200px] md:w-[300px] border-2 border-zinc-600 rounded-lg py-2 px-4"
                     placeholder="Enter name..."
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       setApplyName(e.target.value)
@@ -191,7 +212,7 @@ const JobDetails = () => {
                   <h1 className="font-bold">Email</h1>
                   <input
                     type="text"
-                    className="w-[300px] border-2 border-zinc-600 rounded-lg py-2 px-4"
+                    className="w-[200px] md:w-[300px] border-2 border-zinc-600 rounded-lg py-2 px-4"
                     placeholder="Enter email..."
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       setApplyEmail(e.target.value)
@@ -207,17 +228,20 @@ const JobDetails = () => {
                   </h1>
                   <Textarea
                     placeholder="Describe..."
-                    className="sm:w-[300px] min-h-[120px] border-2 border-zinc-600 rounded-lg px-2"
+                    className="w-[350px] md:w-[300px] min-h-[120px] border-2 border-zinc-600 rounded-lg px-2 mb-2"
                     onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                       setApplyAdditionalInfo(e.target.value)
                     }
                     value={applyAdditionalInfo}
                   />
                 </div>
-                <div className="flex items-center ml-8">
+                <div className="flex items-center md:ml-8">
                   <input
                     type="file"
                     accept=".doc,.docx,.pdf,.jpg,.jpeg,.png,.xml"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setFileValue(e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -231,8 +255,8 @@ const JobDetails = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col ">
-            <div className="flex flex-col bg-white rounded-lg w-[450px] py-4 shadow-xl shadow-black/10 items-center justify-center">
+          <div className="flex flex-col">
+            <div className="flex flex-col bg-white rounded-lg w-screen sm:w-[600px] md:w-[700px] lg:w-[450px] py-4 shadow-xl shadow-black/10 items-center justify-center">
               <h1 className="font-bold text-lg">
                 More Offers From The{" "}
                 <span className="text-blue-600">
@@ -268,6 +292,7 @@ const JobDetails = () => {
           </div>
         </div>
       )}
+      <Toaster />
     </div>
   );
 };

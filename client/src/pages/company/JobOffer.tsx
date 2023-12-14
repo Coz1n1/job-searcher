@@ -1,25 +1,53 @@
 import { IoLocationSharp } from "react-icons/io5";
 import { BsFillBuildingsFill } from "react-icons/bs";
-import { OfferType } from "../../types";
+import { OfferType, ApplicationType } from "../../types";
 import { IoIosSpeedometer } from "react-icons/io";
 import { IoInvertMode } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
 import { MdEdit, MdDelete, MdMore } from "react-icons/md";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface JobOfferProps {
   jobData: OfferType;
 }
 
 const JobOffer: React.FC<JobOfferProps> = ({ jobData }) => {
+  const [applicants, setApplicants] = useState<ApplicationType[]>();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const experience = JSON.parse(jobData.experience);
   const typeOfWork = JSON.parse(jobData.type_of_work);
   const operatingMode = JSON.parse(jobData.operating_mode);
   const technologies = jobData.technologies;
+  const id = jobData.id;
 
   const handleDelete = () => {
     axios.post("http://localhost:3002/deleteOffer", {
-      id: jobData.id,
+      id: id,
+    });
+  };
+
+  useEffect(() => {
+    const getApplicants = async () => {
+      const applicants = await axios.post(
+        "http://localhost:3002/getCompanyApplicants",
+        {
+          id: id,
+        }
+      );
+      setApplicants(applicants.data.applicants);
+      setIsLoading(false);
+    };
+    getApplicants();
+  }, []);
+
+  const handleApplicationsNavi = () => {
+    navigate({
+      pathname: "/applications",
+      search: `?id=${id}`,
     });
   };
 
@@ -50,40 +78,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ jobData }) => {
           </h1>
         </div>
       </div>
-      <div className="flex items-center w-full px-8 mt-8 gap-4">
-        <div className="flex items-center bg-blue-500 px-2 py-1 rounded-lg text-white gap-2">
-          <IoIosSpeedometer size={32} />
-          <div className="flex flex-col">
-            <h1 className="text-zinc-300">Type of work</h1>
-            <h1 className="font-bold">{typeOfWork.value}</h1>
-          </div>
-        </div>
-        <div className="flex items-center bg-emerald-500 px-2 py-1 rounded-lg text-white gap-2">
-          <IoInvertMode size={32} />
-          <div className="flex flex-col">
-            <h1 className="text-zinc-500">Operating mode</h1>
-            <h1 className="font-bold">{operatingMode.value}</h1>
-          </div>
-        </div>
-        <div className="flex items-center bg-purple-500 px-2 py-1 rounded-lg text-white gap-2">
-          <FaStar size={32} />
-          <div className="flex flex-col">
-            <h1 className="text-zinc-200">Experience</h1>
-            <h1 className="font-bold">{experience.value}</h1>
-          </div>
-        </div>
-      </div>
-      <div className="flex gap-4 ml-8 mt-4">
-        {technologies.map((e: any, i) => (
-          <div
-            className="px-2 py-1 font-bold text-white bg-zinc-500 rounded-lg"
-            key={i}
-          >
-            {e.value}
-          </div>
-        ))}
-      </div>
-      <div className="flex gap-4 mt-8 px-8 text-white font-bold">
+      <div className="flex gap-4 mt-4 px-8 text-white font-bold">
         <button className="flex items-center px-2 py-2 rounded-lg bg-[#e44848] gap-1 cursor-pointer">
           <MdEdit size={25} />
           Edit
@@ -99,6 +94,26 @@ const JobOffer: React.FC<JobOfferProps> = ({ jobData }) => {
           <MdMore size={25} />
           See More
         </button>
+      </div>
+      <div className="mt-4 flex items-center px-8 ">
+        {isLoading ? (
+          <h1>Loading Applications...</h1>
+        ) : (
+          <div
+            className="flex bg-blue-200 px-4 py-2 rounded-lg items-center"
+            role="button"
+            onClick={handleApplicationsNavi}
+          >
+            <FaUserFriends size={32} className="text-blue-500" />
+            <h1 className="font-bold text-lg ml-2">
+              Applications -{" "}
+              <span className="text-white bg-emerald-500 px-2 rounded-lg">
+                {applicants?.length}
+              </span>
+              - check
+            </h1>
+          </div>
+        )}
       </div>
     </div>
   );

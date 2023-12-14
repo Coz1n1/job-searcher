@@ -77,6 +77,7 @@ const Jobs = () => {
     }
     setCurrentTech(i);
     setTechName(e);
+    console.log(techName);
   };
 
   // const filteredUserOffers = jobsForUser?.filter((job: OfferType) => {

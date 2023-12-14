@@ -82,7 +82,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
 
   return (
     <div className="flex flex-col items-center mt-4">
-      <Card className="w-[360px] sm:w-[400px] py-4 flex items-center">
+      <Card className="w-screen sm:w-[550px] py-12 flex items-center justify-center">
         <CardContent>
           <div className="flex flex-col items-center">
             <div
@@ -98,7 +98,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <input
                   type="text"
                   placeholder="Enter job title..."
-                  className="w-[300px] sm:w-[350px] px-4 py-2 border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] px-4 py-2 border-2 border-pink-500 rounded-lg"
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setTitle(e.target.value)
                   }
@@ -111,7 +111,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 </h1>
                 <Textarea
                   placeholder="Describe..."
-                  className="w-[300px] sm:w-[350px] min-h-[120px] border-2 border-pink-500 rounded-lg px-2"
+                  className="w-[300px] sm:w-[450px] min-h-[120px] border-2 border-pink-500 rounded-lg px-2"
                   onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
                     setDescription(e.target.value)
                   }
@@ -125,7 +125,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <input
                   type="text"
                   placeholder="Enter location..."
-                  className="w-[300px] sm:w-[350px] px-4 py-2 border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] px-4 py-2 border-2 border-pink-500 rounded-lg"
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setLocation(e.target.value)
                   }
@@ -137,7 +137,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                   Experience
                 </h1>
                 <Select
-                  className="w-[300px] sm:w-[350px] border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={experienceList}
                   placeholder="Select..."
                   value={experience}
@@ -166,7 +166,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                   Technologies
                 </h1>
                 <Select
-                  className="w-[300px] sm:w-[350px] border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={technologiesList}
                   placeholder="Select technologies..."
                   value={technologies}
@@ -182,7 +182,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                   Operating mode
                 </h1>
                 <Select
-                  className="w-[300px] sm:w-[350px] border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={operatingList}
                   placeholder="Select..."
                   value={operatingMode}
@@ -196,7 +196,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                   Type of Work
                 </h1>
                 <Select
-                  className="w-[300px] sm:w-[350px] border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={typeOfWorkList}
                   placeholder="Select..."
                   value={typeOfWork}
@@ -212,7 +212,7 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <input
                   type="text"
                   placeholder="Enter salary..."
-                  className="w-[300px] sm:w-[350px] px-4 py-2 border-2 border-pink-500 rounded-lg"
+                  className="w-[300px] sm:w-[450px] px-4 py-2 border-2 border-pink-500 rounded-lg"
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     setSalary(e.target.value)
                   }

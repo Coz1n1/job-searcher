@@ -25,7 +25,7 @@ const UserOffer: React.FC<UserOfferProps> = ({ offerData }) => {
   };
 
   return (
-    <div className="w-full lg:w-[650px] xl:w-[900px] flex flex-col justify-between h-[180px] bg-white shadow-xl shadow-black/10 rounded-xl px-4 pt-4">
+    <div className="w-full lg:w-[650px] xl:w-[900px] flex flex-col justify-between h-[180px] bg-white shadow-lg shadow-black/10 rounded-xl px-4 pt-4">
       <div className="flex w-full justify-between">
         <div>
           <div className=""></div>

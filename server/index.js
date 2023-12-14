@@ -63,6 +63,23 @@ app.post("/getSpecifiedJobData", async (req, res) => {
   res.json({ jobData: offer.rows[0] });
 });
 
+app.post("/applyForOffer", (req, res) => {
+  const { id, userName, userEmail, additionalInfo, file } = req.body;
+  pool.query(
+    "INSERT INTO applications(id,user_name,user_email,additional_info,file) VALUES($1,$2,$3,$4,$5)",
+    [id, userName, userEmail, additionalInfo, file]
+  );
+});
+
+app.post("/getCompanyApplicants", async (req, res) => {
+  const { id } = req.body;
+  const applicants = await pool.query(
+    "SELECT * FROM applications WHERE id=$1",
+    [id]
+  );
+  res.json({ applicants: applicants.rows });
+});
+
 app.listen(process.env.PORT || 3002, () => {
   console.log("running 3002");
 });

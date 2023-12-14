@@ -15,3 +15,11 @@ export type SelectType = {
   value: string;
   lavel: string;
 };
+
+export type ApplicationType = {
+  id: number;
+  user_name: string;
+  user_email: string;
+  additional_info: string;
+  file: string;
+};
