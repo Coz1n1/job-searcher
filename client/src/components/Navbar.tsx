@@ -5,8 +5,13 @@ const Navbar = () => {
 
   return (
     <div className="absolute flex w-screen items-center justify-between z-10 px-4 sm:px-16 py-8">
-      <div>
-        <h1 className="font-bold text-xl sm:text-3xl">JobSearcher</h1>
+      <div className="cursor-pointer">
+        <h1
+          className="font-bold text-xl sm:text-3xl"
+          onClick={() => navigate("/")}
+        >
+          JobSearcher
+        </h1>
       </div>
       <div className="flex gap-2 sm:gap-8">
         <button

@@ -86,7 +86,7 @@ const JobDetails = () => {
   };
 
   return (
-    <div className="w-screen flex flex-col items-center justify-center relative">
+    <div className="w-screen flex flex-col items-center relative min-h-screen">
       <div className="w-full flex items-center justify-center bg-blue-200 rounded-br-3xl rounded-bl-3xl py-24">
         <div
           className="absolute left-4 md:left-12 w-8 h-8 md:w-16 md:h-16 bg-zinc-500/50 rounded-full flex items-center justify-center"

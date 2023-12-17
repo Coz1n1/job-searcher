@@ -8,8 +8,20 @@ import { IoMdSettings } from "react-icons/io";
 import { FaUser } from "react-icons/fa";
 import Testimonials from "./Testimonials";
 import Navbar from "../../components/Navbar";
+import { animate, motion, useMotionValue, useTransform } from "framer-motion";
+import { useEffect } from "react";
+import ChartSection from "./ChartSection";
 
 const Home = () => {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(count, 500, { duration: 5 });
+
+    return controls.stop;
+  }, []);
+
   return (
     <div className="overflow-hidden relative">
       <Navbar />
@@ -20,8 +32,9 @@ const Home = () => {
         <div className="absolute w-3 h-3 bg-emerald-500 top-4 lg:top-16 right-32 rounded-full"></div>
         <div className="absolute w-4 h-4 bg-red-500 top-56 left-8 lg:top-24 lg:left-48 rounded-full"></div>
         <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-          <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 from-10% via-sky-500 via-30% to-purple-500 to-90%">
-            +500 Developers
+          <span className="flex text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 from-10% via-sky-500 via-30% to-purple-500 to-90%">
+            +<motion.div>{rounded}</motion.div>
+            Developers
           </span>
           <h1 className="font-bold text-2xl text-center">
             Reach our community of developers and start to work with them.
@@ -38,7 +51,8 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-[350px] sm:h-[550px] flex items-center justify-center">
+      <ChartSection />
+      <div className="w-full h-[350px] sm:h-[550px] flex items-center justify-center bg-gradient-to-r from-white to-blue-100">
         <div className="flex">
           <div className="sm:w-1/2 flex flex-col items-center justify-center px-4">
             <h1 className="text-2xl font-bold text-center">
@@ -107,7 +121,13 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="w-[550px] h-[300px] bg-zinc-500/20 shadow-2xl shadow-black/20 rounded-xl mt-24"></div>
+        <div className="w-[700px] h-[380px] bg-zinc-500/20 shadow-2xl shadow-black/20 rounded-xl mt-24">
+          <img
+            src="/images/app.png"
+            alt="app"
+            className="object-cover h-full w-full rounded-xl"
+          />
+        </div>
       </div>
       <Footer />
     </div>

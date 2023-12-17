@@ -1,17 +1,20 @@
 import { useSearchParams } from "react-router-dom";
 import { FaSquarePlus } from "react-icons/fa6";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { OfferType } from "../../types/index";
 import JobOffer from "./JobOffer";
 import { IoClose } from "react-icons/io5";
 import AddingMenu from "./AddingMenu";
+import { FaArrowCircleLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const CompanyProfile = () => {
   const [searchParams] = useSearchParams();
   const company = searchParams.get("company");
   const [isActive, setIsActive] = useState(false);
+  const navigate = useNavigate();
 
   const findAll = async () => {
     const response = await axios.post("http://localhost:3002/companyOffers", {
@@ -69,8 +72,13 @@ const CompanyProfile = () => {
           <AddingMenu company={company} />
         </div>
       ) : (
-        <div className="w-screen flex flex-col items-center justify-center">
-          <h1 className="mb-4 text-2xl font-bold text-center">
+        <div className="w-screen flex flex-col items-center justify-center my-16">
+          <h1 className="mb-4 text-2xl font-bold text-center flex items-center gap-4">
+            <FaArrowCircleLeft
+              size={33}
+              onClick={() => navigate("/")}
+              className="text-blue-500 cursor-pointer"
+            />
             Add and manage offers for the company:
           </h1>
           <h1 className="font-bold text-white text-xl md:text-2xl mb-4 bg-blue-500 px-4 py-2 rounded-lg">

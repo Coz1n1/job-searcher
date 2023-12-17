@@ -37,12 +37,6 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
   const animatedComponents = makeAnimated();
   const { toast } = useToast();
 
-  const deleteAll = () => {
-    axios.post("http://localhost:3002/delete", {
-      companyName: company,
-    });
-  };
-
   const handleAdd = () => {
     if (
       title != "" &&

@@ -4,13 +4,13 @@ import { FaPerson } from "react-icons/fa6";
 
 const Hero = () => {
   return (
-    <div className="h-screen w-screen relative">
+    <div className="h-[680px] w-screen relative">
       <img
         src="/images/hero-background.jpeg"
         alt="hero"
         className="object-cover h-full w-full brightness-50"
       />
-      <div className="absolute top-56 w-full flex flex-col items-center justify-center">
+      <div className="absolute top-36 w-full flex flex-col items-center justify-center">
         <h1 className="text-2xl font-bold text-blue-500 mb-4">
           Enjoy your passion with us
         </h1>

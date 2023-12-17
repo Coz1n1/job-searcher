@@ -154,7 +154,7 @@ const Jobs = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mb-16">
       <Navbar />
       <div className="relative isolate">
         <div
