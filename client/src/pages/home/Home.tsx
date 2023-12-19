@@ -11,8 +11,14 @@ import Navbar from "../../components/Navbar";
 import { animate, motion, useMotionValue, useTransform } from "framer-motion";
 import { useEffect } from "react";
 import ChartSection from "./ChartSection";
+import { useNavigate } from "react-router-dom";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const Home = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const navigate = useNavigate();
   const count = useMotionValue(0);
   const rounded = useTransform(count, (latest) => Math.round(latest));
 
@@ -40,20 +46,33 @@ const Home = () => {
             Reach our community of developers and start to work with them.
           </h1>
           <div className="flex gap-8 mt-4">
-            <button className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white">
-              <FaGithub size={32} />
-              Github
-            </button>
-            <button className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white">
-              <SiGmail size={32} />
-              Mail
-            </button>
+            <a href="https://github.com/Coz1n1" target="#blank">
+              <button className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white">
+                <FaGithub size={32} />
+                Github
+              </button>
+            </a>
+            <a href="mailto:kacpertokajj@gmail.com" target="#blank">
+              <button className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white">
+                <SiGmail size={32} />
+                Mail
+              </button>
+            </a>
           </div>
         </div>
       </div>
       <ChartSection />
-      <div className="w-full h-[350px] sm:h-[550px] flex items-center justify-center bg-gradient-to-r from-white to-blue-100">
-        <div className="flex">
+      <div
+        className="w-full h-[350px] sm:h-[550px] flex items-center justify-center bg-gradient-to-r from-white to-blue-100"
+        ref={ref}
+      >
+        <div
+          className={`flex ${
+            isInView
+              ? "transition-all duration-500 translate-x-0 opacity-100"
+              : "-translate-x-[500px] opacity-0"
+          }`}
+        >
           <div className="sm:w-1/2 flex flex-col items-center justify-center px-4">
             <h1 className="text-2xl font-bold text-center">
               Are you recruiting team for your company?
@@ -66,7 +85,10 @@ const Home = () => {
               <h1 className="font-bold text-2xl text-blue-500">Do it here</h1>
               <FaAngleDown size={36} className="text-blue-500 animate-bounce" />
             </div>
-            <button className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white mt-2">
+            <button
+              className="flex items-center justify-center px-4 py-2 bg-pink-500 rounded-3xl font-bold text-lg gap-2 w-[130px] text-white mt-2"
+              onClick={() => navigate("/company-job-add")}
+            >
               Post a job
             </button>
           </div>
@@ -83,7 +105,7 @@ const Home = () => {
       <div className="w-full flex flex-col items-center justify-center mt-24 mb-24">
         <h1 className="text-2xl font-bold">Dive deeper in our application</h1>
         <div className="flex items-center justify-center flex-wrap mt-8 gap-8">
-          <div className="w-[300px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
+          <div className="w-[350px] h-[150px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
             <div className="flex items-center justify-center gap-2">
               <div className="bg-zinc-500/20 px-1 py-1 rounded-xl">
                 <GiWorld size={26} />
@@ -92,9 +114,12 @@ const Home = () => {
                 One of the most visited job-site in the world
               </h1>
             </div>
-            <p className="text-zinc-500 mt-2">We</p>
+            <p className="text-zinc-500 text-center mt-2">
+              We are happy to annouce that we are in the top visited IT jobs
+              sites.
+            </p>
           </div>
-          <div className="w-[300px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
+          <div className="w-[350px] h-[150px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
             <div className="flex items-center justify-center gap-2">
               <div className="bg-zinc-500/20 px-1 py-1 rounded-xl">
                 <IoMdSettings size={26} />
@@ -107,7 +132,7 @@ const Home = () => {
               Job Seeker or HR Manager? You can find here every necessary tool.
             </p>
           </div>
-          <div className="w-[300px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
+          <div className="w-[350px] h-[150px] shadow-md shadow-black/20 rounded-lg flex flex-col items-center justify-center py-4 px-2">
             <div className="flex items-center justify-center gap-2">
               <div className="bg-zinc-500/20 px-1 py-1 rounded-xl">
                 <FaUser size={26} />
@@ -121,7 +146,7 @@ const Home = () => {
             </p>
           </div>
         </div>
-        <div className="w-[700px] h-[380px] bg-zinc-500/20 shadow-2xl shadow-black/20 rounded-xl mt-24">
+        <div className="md:w-[700px] md:h-[380px] bg-zinc-500/20 shadow-2xl shadow-black/20 rounded-xl mt-24">
           <img
             src="/images/app.png"
             alt="app"

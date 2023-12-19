@@ -5,12 +5,15 @@ import { FaReact } from "react-icons/fa";
 import { FaCss3 } from "react-icons/fa";
 import { SiTypescript } from "react-icons/si";
 import { TbBrandNextjs } from "react-icons/tb";
-import { Slider } from "@/components/ui/slider";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { OfferType } from "@/types";
 import UserOffer from "./UserOffer";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { IoMdCloseCircle } from "react-icons/io";
+import { useInView } from "framer-motion";
+import { useRef } from "react";
 
 const techData = [
   {
@@ -47,18 +50,30 @@ const techData = [
 
 const Jobs = () => {
   const [currentTech, setCurrentTech] = useState<number | null>(null);
-  const [salary, setSalary] = useState(0);
+  const [currentType, setCurrentType] = useState<number | null>(null);
+  const [currentMode, setCurrentMode] = useState<number | null>(null);
+  const [currentExperience, setCurrentExperience] = useState<number | null>(
+    null
+  );
   const [techName, setTechName] = useState("");
-  const [type, setType] = useState(false);
+  const [typeName, setTypeName] = useState("");
+  const [modeName, setModeName] = useState("");
+  const [experienceName, setExperienceName] = useState("");
   const [titleFilter, setTitleFilter] = useState("");
-  const [filters, setFilters] = useState<string[]>([]);
-  const [operatingFilters, setOperatingFilters] = useState<string[]>([]);
-  const [workType, setWorkType] = useState(["Part-Time", "Full-Time"]);
   let workTypeFilters = ["Part-Time", "Full-Time"];
   let operatingModeFilters = ["Home", "Hybrid", "Office"];
+  let experienceFilters = ["Junior", "Mid/Regular", "Senior"];
   const [jobsForUser, setJobsForUser] = useState<OfferType[]>([]);
   const [items, setItems] = useState<OfferType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modeFlag, setModeFlag] = useState(0);
+  const [typeFlag, setTypeFlag] = useState(0);
+  const [experienceFlag, setExperienceFlag] = useState(0);
+  const [technologyFlag, setTechnologyFlag] = useState(0);
+  const [count, setCount] = useState(modeFlag + typeFlag + technologyFlag);
+  const { toast } = useToast();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     const getAll = async () => {
@@ -71,90 +86,105 @@ const Jobs = () => {
     getAll();
   }, []);
 
+  useEffect(() => {
+    setCount(modeFlag + typeFlag + technologyFlag + experienceFlag);
+  }, [modeFlag, typeFlag, technologyFlag, experienceFlag]);
+
   const handleTechChange = (i: number, e: string) => {
     if (i === currentTech) {
-      return null;
+      setCurrentTech(null);
+      setTechnologyFlag(0);
+    } else {
+      setCurrentTech(i);
+      setTechName(e);
+      setTechnologyFlag(1);
     }
-    setCurrentTech(i);
-    setTechName(e);
-    console.log(techName);
   };
 
-  // const filteredUserOffers = jobsForUser?.filter((job: OfferType) => {
-  //   return job.title.toLowerCase().includes(titleFilter);
-  //   && workType.includes(JSON.parse(job.type_of_work).value)
-  // });
+  const handleTypeChange = (e: string, i: number) => {
+    if (i === currentType) {
+      setCurrentType(null);
+      setTypeFlag(0);
+    } else {
+      setCurrentType(i);
+      setTypeName(e);
+      setTypeFlag(1);
+    }
+  };
+
+  const handleOperatingModeChange = (e: string, i: number) => {
+    if (i === currentMode) {
+      setCurrentMode(null);
+      setModeFlag(0);
+    } else {
+      setCurrentMode(i);
+      setModeName(e);
+      setModeFlag(1);
+    }
+  };
+
+  const handleExperienceChange = (e: string, i: number) => {
+    if (i === currentExperience) {
+      setCurrentExperience(null);
+      setExperienceFlag(0);
+    } else {
+      setCurrentExperience(i);
+      setExperienceName(e);
+      setExperienceFlag(1);
+    }
+  };
+
+  const handleFilter = () => {
+    if (count === 4) {
+      axios
+        .post("http://localhost:3002/filterData", {
+          typeOfWork: typeName,
+          operatingMode: modeName,
+          technology: techName,
+          experience: experienceName,
+        })
+        .then((res) => {
+          console.log(res.data.jobs);
+          setJobsForUser(res.data.jobs);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast({
+        title: "Filters error",
+        description:
+          "Select all filters: technology, type of work, operating mode, experience and click filter :)",
+      });
+    }
+  };
+
+  const clearFilters = () => {
+    setCurrentMode(null);
+    setModeFlag(0);
+    setCurrentType(null);
+    setTypeFlag(0);
+    setCurrentTech(null);
+    setTechnologyFlag(0);
+    setCurrentExperience(null);
+    setExperienceFlag(0);
+  };
+
+  const handleReset = () => {
+    setJobsForUser(items);
+    clearFilters();
+  };
 
   const handleFindJobTitle = () => {
-    if (titleFilter != "") {
-      let filteredByTitle = jobsForUser.filter((job: OfferType) => {
+    setJobsForUser(
+      jobsForUser.filter((job) => {
         return job.title.toLowerCase().includes(titleFilter);
-      });
-      setJobsForUser(filteredByTitle);
-    } else {
-      setJobsForUser(items);
-    }
-  };
-
-  const handleFilterButton = (selectedTypeOfWork: string) => {
-    if (filters.includes(selectedTypeOfWork)) {
-      let newFilters = filters.filter((el) => el !== selectedTypeOfWork);
-      setFilters(newFilters);
-    } else {
-      setFilters([...filters, selectedTypeOfWork]);
-    }
-  };
-
-  const handleOperatingFilterButton = (operatingMode: string) => {
-    if (operatingFilters.includes(operatingMode)) {
-      let newOperatingFilters = operatingFilters.filter(
-        (el) => el !== operatingMode
-      );
-      setOperatingFilters(newOperatingFilters);
-    } else {
-      setOperatingFilters([...operatingFilters, operatingMode]);
-    }
-  };
-
-  useEffect(() => {
-    filterItems();
-  }, [filters]);
-
-  useEffect(() => {
-    filterOperating();
-  }, [operatingFilters]);
-
-  const filterItems = () => {
-    if (filters.length > 0) {
-      let tempItems: any = filters.map((category) => {
-        let temp = items.filter(
-          (job) => JSON.parse(job.type_of_work).value === category
-        );
-        return temp;
-      });
-      console.log(tempItems.flat());
-      setJobsForUser(tempItems.flat());
-    } else {
-      setJobsForUser([...items]);
-    }
-  };
-
-  const filterOperating = () => {
-    if (operatingFilters.length > 0) {
-      let tempItems = operatingFilters.map((mode) => {
-        let temp = items.filter(
-          (job) => JSON.parse(job.operating_mode).value === mode
-        );
-        return temp;
-      });
-      setJobsForUser(tempItems.flat());
-    } else {
-      setJobsForUser([...items]);
-    }
+      })
+    );
   };
 
   return (
-    <div className="flex flex-col mb-16">
+    <div className="flex flex-col mb-16 w-screen min-h-screen" ref={ref}>
       <Navbar />
       <div className="relative isolate">
         <div
@@ -170,19 +200,25 @@ const Jobs = () => {
           ></div>
         </div>
       </div>
-      <div className="w-screen flex items-center justify-center pt-32 gap-2 md:gap-8 flex-wrap">
+      <div
+        className={`w-screen flex items-center justify-center pt-32 gap-2 md:gap-8 flex-wrap ${
+          isInView
+            ? "transition-all duration-500 translate-x-0 opacity-100"
+            : "-translate-x-[500px] opacity-0"
+        }`}
+      >
         {techData.map((e, i) => (
           <div
             className={
               currentTech === i
-                ? "w-16 md:w-24 flex flex-col cursor-pointer items-center bg-blue-500/50 hover:bg-blue-600/30 px-2 py-2 rounded-lg"
+                ? "w-16 md:w-24 flex flex-col cursor-pointer items-center bg-blue-500 hover:bg-blue-600/30 px-2 py-2 rounded-lg text-white"
                 : "w-16 md:w-24 flex flex-col cursor-pointer items-center hover:bg-blue-600/30 px-2 py-2 rounded-lg"
             }
             key={i}
             onClick={() => handleTechChange(i, e.name)}
           >
             <div
-              className={`w-6 md:w-12 h-6 md:h-12 rounded-full text-white ${e.color} flex items-center justify-center`}
+              className={`w-10 md:w-12 h-10 md:h-12 rounded-full text-white ${e.color} flex items-center justify-center`}
             >
               {e.icon}
             </div>
@@ -207,10 +243,21 @@ const Jobs = () => {
         </button>
       </div>
       <div className="w-screen flex flex-col lg:flex-row justify-center gap-8">
-        <div className="flex justify-between px-8 lg:px-0 flex-wrap lg:flex-col lg:w-[350px] bg-white shadow-2xl shadow-black/20 py-2 rounded-lg border-[1px] border-zinc-500/20">
-          <h1 className="font-bold text-xl px-4 py-4 hidden lg:flex">
-            Filters
-          </h1>
+        <div className="flex px-8 lg:px-0 flex-row flex-wrap justify-between lg:justify-start lg:flex-col lg:w-[350px] max-h-[600px] bg-white shadow-2xl shadow-black/20 py-2 rounded-lg border-[1px] border-zinc-500/20">
+          <div className="flex w-full justify-between px-4 items-center">
+            <h1 className="font-bold text-xl py-4 hidden lg:flex">Filters</h1>
+            {count > 0 ? (
+              <button
+                onClick={clearFilters}
+                className="bg-zinc-500 rounded-3xl px-2 py-2 font-bold text-white flex items-center gap-2"
+              >
+                <IoMdCloseCircle size={32} />
+                Clear Filters
+              </button>
+            ) : (
+              ""
+            )}
+          </div>
           <div className="flex flex-col gap-1 md:gap-4 py-4 lg:border-t-[1px] lg:border-zinc-500 px-0 md:px-4">
             <h1 className="text-blue-500 font-bold text-md md:text-lg">
               Type of Work
@@ -219,9 +266,9 @@ const Jobs = () => {
               {workTypeFilters.map((e, i) => (
                 <button
                   className={`px-1 md:px-4 md:py-2 rounded-xl border-2 border-zinc-500 font-bold hover:bg-blue-500/30 ${
-                    filters?.includes(e) ? "bg-blue-500" : ""
+                    currentType === i ? "bg-blue-500 text-white" : ""
                   }`}
-                  onClick={() => handleFilterButton(e)}
+                  onClick={() => handleTypeChange(e, i)}
                   key={i}
                 >
                   {e}
@@ -237,9 +284,9 @@ const Jobs = () => {
               {operatingModeFilters.map((e, i) => (
                 <button
                   className={`px-1 md:px-4 md:py-2 rounded-xl border-2 border-zinc-500 font-bold hover:bg-blue-500/30 ${
-                    operatingFilters?.includes(e) ? "bg-blue-500" : ""
+                    currentMode === i ? "bg-blue-500 text-white" : ""
                   }`}
-                  onClick={() => handleOperatingFilterButton(e)}
+                  onClick={() => handleOperatingModeChange(e, i)}
                   key={i}
                 >
                   {e}
@@ -247,27 +294,51 @@ const Jobs = () => {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-1 md:gap-4 py-4 lg:border-t-[1px] lg:border-zinc-500 px-0 md:px-4">
-            <h1 className="text-blue-500 font-bold text-lg">Salary</h1>
-            <Slider
-              id="slider"
-              defaultValue={[3000]}
-              max={10000}
-              step={100}
-              onValueChange={(e: any) => console.log(e.target.max)}
-            />
+          <div className="flex flex-col gap-1 md:gap-4 py-4 lg:border-t-[1px] lg:border-zinc-500 px-0 md:px-4 min-w-[150px]">
+            <h1 className="text-blue-500 font-bold text-lg">Experience</h1>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              {experienceFilters.map((e, i) => (
+                <button
+                  className={`px-1 md:px-4 md:py-2 rounded-xl border-2 border-zinc-500 font-bold hover:bg-blue-500/30 ${
+                    currentExperience === i ? "bg-blue-500 text-white" : ""
+                  }`}
+                  onClick={() => handleExperienceChange(e, i)}
+                  key={i}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex justify-center gap-1 md:gap-4 py-4 lg:border-t-[1px] lg:border-zinc-500 px-0 md:px-4">
+            <button
+              className={`px-4 md:px-16 py-1 md:py-3 rounded-3xl ${
+                count === 4 ? "bg-blue-500" : "bg-blue-500/40"
+              } font-bold text-white duration-200 hover:scale-110`}
+              onClick={handleFilter}
+            >
+              Filter {count}/4
+            </button>
           </div>
         </div>
         {isLoading ? (
           <h1 className="text-xl font-bold text-pink-500">Loading...</h1>
         ) : (
           <div className="flex flex-col items-center w-full lg:w-[650px] xl:w-[900px] overflow-y-auto gap-4">
+            <div
+              role="button"
+              className="bg-emerald-500 px-4 py-2 rounded-xl font-bold text-white animate-pulse"
+              onClick={handleReset}
+            >
+              See All Offers - [{items.length}]
+            </div>
             {jobsForUser?.map((e: OfferType, i) => (
               <UserOffer offerData={e} key={i} />
             ))}
           </div>
         )}
       </div>
+      <Toaster />
     </div>
   );
 };

@@ -80,6 +80,21 @@ app.post("/getCompanyApplicants", async (req, res) => {
   res.json({ applicants: applicants.rows });
 });
 
+app.post("/filterData", async (req, res) => {
+  const { typeOfWork, operatingMode, technology, experience } = req.body;
+  console.log(typeOfWork, operatingMode, experience, technology);
+  const jobs = await pool.query(
+    "SELECT * FROM jobs,json_array_elements(jobs.technologies) obj WHERE type_of_work=$1 AND operating_mode=$2 AND experience=$3 AND obj->>'value'=$4",
+    [typeOfWork, operatingMode, experience, technology]
+  );
+  console.log(jobs.rows);
+  res.json({ jobs: jobs.rows });
+});
+
+app.post("/change", (req, res) => {
+  pool.query("ALTER TABLE jobs ALTER COLUMN operating_mode TYPE json");
+});
+
 app.listen(process.env.PORT || 3002, () => {
   console.log("running 3002");
 });

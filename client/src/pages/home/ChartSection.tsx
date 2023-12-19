@@ -30,7 +30,7 @@ const ChartSection = () => {
         <h1 className="text-3xl font-bold text-center text-blue-500">
           Grow fast with us
         </h1>
-        <p className="text-zinc-500 font-bold text-xl">
+        <p className="text-zinc-500 font-bold text-xl text-center">
           Join our group of enthusiasts, which is growing every year, and get
           your dream job.
         </p>

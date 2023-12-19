@@ -1,8 +1,11 @@
 import { FaBuilding } from "react-icons/fa";
 import { MdOutlineWork } from "react-icons/md";
 import { FaPerson } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="h-[680px] w-screen relative">
       <img
@@ -21,7 +24,10 @@ const Hero = () => {
           We help you find your dream job by sharing our wide offer and give you
           an opportunity to choose from it
         </p>
-        <button className="px-4 py-2 bg-blue-500 rounded-lg text-white font-bold mt-4 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-110">
+        <button
+          className="px-4 py-2 bg-blue-500 rounded-lg text-white font-bold mt-4 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:scale-110"
+          onClick={() => navigate("/jobs")}
+        >
           See all jobs
         </button>
         <h1 className="mt-4 font-bold text-white text-xl">

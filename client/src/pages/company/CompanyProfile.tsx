@@ -27,6 +27,7 @@ const CompanyProfile = () => {
     data: companyJobOffers,
     isLoading,
     isError,
+    refetch,
   } = useQuery<OfferType[], Error>({
     queryKey: ["query-tutorials"],
     queryFn: async () => {
@@ -37,6 +38,11 @@ const CompanyProfile = () => {
   if (isError) {
     return <h1>Error occured</h1>;
   }
+
+  const handleRefetch = () => {
+    setIsActive(!isActive);
+    refetch();
+  };
 
   return (
     <div className="w-screen flex flex-col min-h-screen">
@@ -60,7 +66,7 @@ const CompanyProfile = () => {
             <div className="px-1 py-1 bg-pink-500 rounded-xl">
               <IoClose
                 size={33}
-                onClick={() => setIsActive(!isActive)}
+                onClick={handleRefetch}
                 className="cursor-pointer text-white"
               />
             </div>
@@ -73,7 +79,7 @@ const CompanyProfile = () => {
         </div>
       ) : (
         <div className="w-screen flex flex-col items-center justify-center my-16">
-          <h1 className="mb-4 text-2xl font-bold text-center flex items-center gap-4">
+          <h1 className="mb-4 text-lg md:text-2xl font-bold text-center flex items-center gap-4">
             <FaArrowCircleLeft
               size={33}
               onClick={() => navigate("/")}
@@ -84,7 +90,7 @@ const CompanyProfile = () => {
           <h1 className="font-bold text-white text-xl md:text-2xl mb-4 bg-blue-500 px-4 py-2 rounded-lg">
             {company}
           </h1>
-          <h1 className="text-2xl font-bold mb-8">
+          <h1 className="text-lg md:text-2xl font-bold mb-8">
             All job offers -{" "}
             <span className="text-pink-500">[{companyJobOffers?.length}]</span>
           </h1>
@@ -103,7 +109,10 @@ const CompanyProfile = () => {
               onClick={() => setIsActive(!isActive)}
             >
               <div className="flex items-center gap-2">
-                <button className="flex items-center gap-2">
+                <button
+                  className="flex items-center gap-2"
+                  onClick={handleRefetch}
+                >
                   <h1 className="text-xl font-bold text-pink-500">
                     Add Job Offer
                   </h1>

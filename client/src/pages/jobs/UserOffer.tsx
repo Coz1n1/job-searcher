@@ -12,9 +12,9 @@ interface UserOfferProps {
 
 const UserOffer: React.FC<UserOfferProps> = ({ offerData }) => {
   const navigate = useNavigate();
-  const experience = JSON.parse(offerData.experience);
-  const operatingMode = JSON.parse(offerData.operating_mode);
-  const typeOfWork = JSON.parse(offerData.type_of_work);
+  const experience = offerData.experience;
+  const operatingMode = offerData.operating_mode;
+  const typeOfWork = offerData.type_of_work;
   const technologies = offerData.technologies;
 
   const handleDetailsCheck = () => {
@@ -27,8 +27,14 @@ const UserOffer: React.FC<UserOfferProps> = ({ offerData }) => {
   return (
     <div className="w-full lg:w-[650px] xl:w-[900px] flex flex-col justify-between h-[180px] bg-white shadow-lg shadow-black/10 rounded-xl px-4 pt-4">
       <div className="flex w-full justify-between">
-        <div>
-          <div className=""></div>
+        <div className="flex">
+          <div className="w-[40px] h-[40px] md:w-[80px] md:h-[80px] rounded-full">
+            <img
+              src="./images/company.png"
+              alt="company"
+              className="w-full h-full object-cover"
+            />
+          </div>
           <div className="flex flex-col h-full gap-2">
             <h1 className="text-lg md:text-xl font-bold">{offerData.title}</h1>
             <div className="flex items-center gap-4">
@@ -40,19 +46,17 @@ const UserOffer: React.FC<UserOfferProps> = ({ offerData }) => {
               </div>
               <div className="flex items-center gap-2">
                 <FaStar size={25} className="text-pink-500" />
-                <h1 className="font-bold text-zinc-500">{experience.value}</h1>
+                <h1 className="font-bold text-zinc-500">{experience}</h1>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
                 <IoInvertMode size={25} className="text-blue-500" />
-                <h1 className="font-bold text-zinc-500">
-                  {operatingMode.value}
-                </h1>
+                <h1 className="font-bold text-zinc-500">{operatingMode}</h1>
               </div>
               <div className="flex items-center gap-2">
                 <IoIosSpeedometer size={25} className="text-blue-500" />
-                <h1 className="font-bold text-zinc-500">{typeOfWork.value}</h1>
+                <h1 className="font-bold text-zinc-500">{typeOfWork}</h1>
               </div>
             </div>
           </div>

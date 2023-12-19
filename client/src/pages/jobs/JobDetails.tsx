@@ -143,9 +143,7 @@ const JobDetails = () => {
                   </div>
                   <div className="flex flex-col">
                     <h1 className="font-bold text-zinc-500">Experience</h1>
-                    <h1 className="font-bold">
-                      {JSON.parse(currentJobData!.experience).value}
-                    </h1>
+                    <h1 className="font-bold">{currentJobData!.experience}</h1>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -155,7 +153,7 @@ const JobDetails = () => {
                   <div className="flex flex-col">
                     <h1 className="font-bold text-zinc-500">Type of Work</h1>
                     <h1 className="font-bold">
-                      {JSON.parse(currentJobData!.type_of_work).value}
+                      {currentJobData!.type_of_work}
                     </h1>
                   </div>
                 </div>
@@ -166,7 +164,7 @@ const JobDetails = () => {
                   <div className="flex flex-col">
                     <h1 className="font-bold text-zinc-500">Operating Mode</h1>
                     <h1 className="font-bold">
-                      {JSON.parse(currentJobData!.operating_mode).value}
+                      {currentJobData!.operating_mode}
                     </h1>
                   </div>
                 </div>
@@ -260,7 +258,7 @@ const JobDetails = () => {
               <h1 className="font-bold text-lg">
                 More Offers From The{" "}
                 <span className="text-blue-600">
-                  {currentJobData?.company_name}
+                  {currentJobData!.company_name}
                 </span>
               </h1>
               <div className="flex flex-col w-full px-2 mt-8 gap-4">

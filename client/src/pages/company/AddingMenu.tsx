@@ -62,6 +62,10 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
         })
         .then((response) => {
           console.log(response.data);
+          toast({
+            title: "Job Added",
+            description: "You can close this window now.",
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -133,9 +137,9 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <Select
                   className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={experienceList}
-                  placeholder="Select..."
+                  placeholder={experience}
                   value={experience}
-                  onChange={(data: any) => setExperience(data)}
+                  onChange={(data: any) => setExperience(data.value)}
                   isSearchable={true}
                 />
               </div>
@@ -178,9 +182,9 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <Select
                   className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={operatingList}
-                  placeholder="Select..."
+                  placeholder={operatingMode}
                   value={operatingMode}
-                  onChange={(data: any) => setOperatingMode(data)}
+                  onChange={(data: any) => setOperatingMode(data.value)}
                   isSearchable={true}
                 />
               </div>
@@ -192,9 +196,9 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
                 <Select
                   className="w-[300px] sm:w-[450px] border-2 border-pink-500 rounded-lg"
                   options={typeOfWorkList}
-                  placeholder="Select..."
+                  placeholder={typeOfWork}
                   value={typeOfWork}
-                  onChange={(data: any) => setTypeOfWork(data)}
+                  onChange={(data: any) => setTypeOfWork(data.value)}
                   isSearchable={true}
                 />
               </div>
