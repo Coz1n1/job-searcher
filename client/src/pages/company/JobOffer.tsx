@@ -18,7 +18,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ jobData }) => {
   const id = jobData.id;
 
   const handleDelete = () => {
-    axios.post("http://localhost:3002/deleteOffer", {
+    axios.post("https://job-searcher-production.up.railway.app/deleteOffer", {
       id: id,
     });
   };
@@ -26,7 +26,7 @@ const JobOffer: React.FC<JobOfferProps> = ({ jobData }) => {
   useEffect(() => {
     const getApplicants = async () => {
       const applicants = await axios.post(
-        "http://localhost:3002/getCompanyApplicants",
+        "https://job-searcher-production.up.railway.app/getCompanyApplicants",
         {
           id: id,
         }

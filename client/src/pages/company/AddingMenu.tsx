@@ -49,17 +49,20 @@ const AddingMenu: React.FC<addingMenuProps> = ({ company }) => {
       typeOfWork != ""
     ) {
       axios
-        .post("http://localhost:3002/addCompanyOffer", {
-          title: title,
-          description: description,
-          technologies: JSON.stringify(technologies),
-          salary: salary,
-          experience: experience,
-          companyName: company,
-          location: location,
-          operatingMode: operatingMode,
-          typeOfWork: typeOfWork,
-        })
+        .post(
+          "https://job-searcher-production.up.railway.app/addCompanyOffer",
+          {
+            title: title,
+            description: description,
+            technologies: JSON.stringify(technologies),
+            salary: salary,
+            experience: experience,
+            companyName: company,
+            location: location,
+            operatingMode: operatingMode,
+            typeOfWork: typeOfWork,
+          }
+        )
         .then((response) => {
           console.log(response.data);
           toast({

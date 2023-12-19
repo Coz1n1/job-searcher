@@ -32,7 +32,7 @@ const JobDetails = () => {
   useEffect(() => {
     const getJobData = async () => {
       const response = await axios.post(
-        "http://localhost:3002/getSpecifiedJobData",
+        "https://job-searcher-production.up.railway.app/getSpecifiedJobData",
         {
           id: id,
         }
@@ -46,9 +46,12 @@ const JobDetails = () => {
 
   useEffect(() => {
     const getCompanyJobs = async () => {
-      const response = await axios.post("http://localhost:3002/companyOffers", {
-        company: companyName,
-      });
+      const response = await axios.post(
+        "https://job-searcher-production.up.railway.app/companyOffers",
+        {
+          company: companyName,
+        }
+      );
       console.log(response.data.jobs);
       setCurrentCompanyOffers(response.data.jobs);
     };
@@ -57,7 +60,7 @@ const JobDetails = () => {
 
   const handleApply = () => {
     axios
-      .post("http://localhost:3002/applyForOffer", {
+      .post("https://job-searcher-production.up.railway.app/applyForOffer", {
         id: id,
         userName: applyName,
         userEmail: applyEmail,

@@ -15,7 +15,7 @@ const Applications = () => {
   useEffect(() => {
     const getApplicants = async () => {
       const applicants = await axios.post(
-        "http://localhost:3002/getCompanyApplicants",
+        "https://job-searcher-production.up.railway.app/getCompanyApplicants",
         {
           id: id,
         }
@@ -29,7 +29,7 @@ const Applications = () => {
   useEffect(() => {
     const getJobData = async () => {
       const response = await axios.post(
-        "http://localhost:3002/getSpecifiedJobData",
+        "https://job-searcher-production.up.railway.app/getSpecifiedJobData",
         {
           id: id,
         }

@@ -17,9 +17,12 @@ const CompanyProfile = () => {
   const navigate = useNavigate();
 
   const findAll = async () => {
-    const response = await axios.post("http://localhost:3002/companyOffers", {
-      company: company,
-    });
+    const response = await axios.post(
+      "https://job-searcher-production.up.railway.app/companyOffers",
+      {
+        company: company,
+      }
+    );
     return response.data.jobs;
   };
 

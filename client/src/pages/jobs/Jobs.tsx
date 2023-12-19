@@ -77,7 +77,9 @@ const Jobs = () => {
 
   useEffect(() => {
     const getAll = async () => {
-      const response = await axios.get("http://localhost:3002/getAll");
+      const response = await axios.get(
+        "https://job-searcher-production.up.railway.app/getAll"
+      );
       console.log(response.data.offers);
       setJobsForUser(response.data.offers);
       setItems(response.data.offers);
@@ -137,7 +139,7 @@ const Jobs = () => {
   const handleFilter = () => {
     if (count === 4) {
       axios
-        .post("http://localhost:3002/filterData", {
+        .post("https://job-searcher-production.up.railway.app/filterData", {
           typeOfWork: typeName,
           operatingMode: modeName,
           technology: techName,
